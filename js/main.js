@@ -1,0 +1,10 @@
+import {db} from './storage.js';
+import {count} from './cart.js';
+db.init();
+const nav=[['index.html','Home'],['shop.html','Marketplace'],['cart.html','Cart']];
+const page=document.body.dataset.page;
+document.getElementById('site-header').innerHTML=`<div class="bar">Welcome to Nova Activations — Your digital software marketplace. Demo site.</div><header class="head wrap"><a class="logo" href="index.html">NOVA <span class="gold">ACTIVATIONS</span></a><button class="burger" aria-label="Menu" id="bg">☰</button><nav id="nav">${nav.map(([h,t])=>`<a href="${h}" ${h.startsWith(page)?'class="on"':''}>${t}${t==='Cart'?' (<span data-count>'+count()+'</span>)':''}</a>`).join('')}</nav><form action="shop.html"><input name="q" type="search" placeholder="Search" aria-label="Search"></form></header>`;
+document.getElementById('site-footer').innerHTML='<footer class="foot wrap"><p><strong>NOVA ACTIVATIONS</strong> — frontend-only demonstration. No real payments are processed and no real licence keys are issued.</p></footer>';
+document.getElementById('bg').onclick=()=>document.getElementById('nav').classList.toggle('open');
+const run={index:()=>import('./products.js').then(m=>m.home()),shop:()=>import('./products.js').then(m=>m.shop()),product:()=>import('./products.js').then(m=>m.product()),cart:()=>import('./cart.js').then(m=>m.cartPage()),checkout:()=>import('./checkout.js').then(m=>m.checkout()),confirmation:()=>import('./checkout.js').then(m=>m.confirmation())};
+import('./products.js');run[page]?.();
